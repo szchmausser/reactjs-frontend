@@ -5,10 +5,10 @@ export const isUserAuthorized = (
 ) => {
   // Verificar si el usuario está logueado
   if (!contextSessionData?.login?.access_token) {
-    console.log(
-      "No hay usuario logueado",
-      contextSessionData?.login?.access_token
-    );
+    // console.log(
+    //   "No hay usuario logueado",
+    //   contextSessionData?.login?.access_token
+    // );
     return false; // Si el usuario no está logueado, no se permite el acceso.
   }
 

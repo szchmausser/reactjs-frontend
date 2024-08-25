@@ -11,94 +11,88 @@ import { useSession } from "../states/stores/sessionStore";
 const CountryRoutes = () => {
   const { data: contextSessionData } = useSession();
   return (
-    console.log("contextSessionDataDesdeRutas", contextSessionData),
-    (
-      <Routes>
-        <Route
-          index
-          element={
-            <ProtectedRoutes
-              isAllowed={isUserAuthorized(
-                contextSessionData,
-                ["permission1"],
-                ["role1"]
-              )}
-              redirectTo={
-                contextSessionData?.login?.access_token
-                  ? "/unauthorized"
-                  : "/login"
-              }
-            >
-              <CountriesList />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="create"
-          element={
-            <ProtectedRoutes
-              isAllowed={isUserAuthorized(contextSessionData, [
-                "country.create",
-              ])}
-              redirectTo={
-                contextSessionData?.login?.access_token
-                  ? "/unauthorized"
-                  : "/login"
-              }
-            >
-              <CountryCreate />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="show/:id"
-          element={
-            <ProtectedRoutes
-              isAllowed={isUserAuthorized(contextSessionData, ["country.show"])}
-              redirectTo={
-                contextSessionData?.login?.access_token
-                  ? "/unauthorized"
-                  : "/login"
-              }
-            >
-              <CountryShow />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="edit/:id"
-          element={
-            <ProtectedRoutes
-              isAllowed={isUserAuthorized(contextSessionData, ["country.edit"])}
-              redirectTo={
-                contextSessionData?.login?.access_token
-                  ? "/unauthorized"
-                  : "/login"
-              }
-            >
-              <CountryEdit />
-            </ProtectedRoutes>
-          }
-        />
-        <Route
-          path="delete/:id"
-          element={
-            <ProtectedRoutes
-              isAllowed={isUserAuthorized(contextSessionData, [
-                "country.delete",
-              ])}
-              redirectTo={
-                contextSessionData?.login?.access_token
-                  ? "/unauthorized"
-                  : "/login"
-              }
-            >
-              <CountryDelete />
-            </ProtectedRoutes>
-          }
-        />
-      </Routes>
-    )
+    // console.log("contextSessionDataDesdeRutas", contextSessionData),
+    <Routes>
+      <Route
+        index
+        element={
+          <ProtectedRoutes
+            isAllowed={isUserAuthorized(
+              contextSessionData,
+              ["permission1"],
+              ["role1"]
+            )}
+            redirectTo={
+              contextSessionData?.login?.access_token
+                ? "/unauthorized"
+                : "/login"
+            }
+          >
+            <CountriesList />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="create"
+        element={
+          <ProtectedRoutes
+            isAllowed={isUserAuthorized(contextSessionData, ["country.create"])}
+            redirectTo={
+              contextSessionData?.login?.access_token
+                ? "/unauthorized"
+                : "/login"
+            }
+          >
+            <CountryCreate />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="show/:id"
+        element={
+          <ProtectedRoutes
+            isAllowed={isUserAuthorized(contextSessionData, ["country.show"])}
+            redirectTo={
+              contextSessionData?.login?.access_token
+                ? "/unauthorized"
+                : "/login"
+            }
+          >
+            <CountryShow />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="edit/:id"
+        element={
+          <ProtectedRoutes
+            isAllowed={isUserAuthorized(contextSessionData, ["country.edit"])}
+            redirectTo={
+              contextSessionData?.login?.access_token
+                ? "/unauthorized"
+                : "/login"
+            }
+          >
+            <CountryEdit />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="delete/:id"
+        element={
+          <ProtectedRoutes
+            isAllowed={isUserAuthorized(contextSessionData, ["country.delete"])}
+            redirectTo={
+              contextSessionData?.login?.access_token
+                ? "/unauthorized"
+                : "/login"
+            }
+          >
+            <CountryDelete />
+          </ProtectedRoutes>
+        }
+      />
+    </Routes>
   );
 };
 
