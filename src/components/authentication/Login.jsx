@@ -9,6 +9,7 @@ import {
   fetchUserRoles,
   fetchUserPermissions,
 } from "./loginEndpoints";
+import Error from "../error/Error";
 
 const Login = () => {
   const { setData } = useSession();
@@ -101,14 +102,7 @@ const Login = () => {
     );
   }
 
-  if (loginMutation.isError) {
-    return (
-      <div>
-        Ocurrió un error: {loginMutation.error.message}
-        {loginMutation.error.response?.data?.data?.errors}
-      </div>
-    );
-  }
+  if (loginMutation.isError) return <Error message={loginMutation.error} />;
 
   return (
     <>

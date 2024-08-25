@@ -3,129 +3,48 @@ export const isUserAuthorized = (
   requiredPermissions = [],
   requiredRoles = []
 ) => {
-  // Verificar si el usuario está logueado
+  // Cláusula de guarda 1: Verificación de autenticación. Si no hay token, el usuario no está autenticado y se deniega el acceso inmediatamente.
   if (!contextSessionData?.login?.access_token) {
-    // console.log(
-    //   "No hay usuario logueado",
-    //   contextSessionData?.login?.access_token
-    // );
-    return false; // Si el usuario no está logueado, no se permite el acceso.
+    console.log("Usuario no autenticado. Acceso denegado.");
+    return false;
   }
 
-  // console.log("SessionData", contextSessionData);
-
-  const availableUserPermissions =
-    contextSessionData?.permissions?.map((permission) => permission.name) || [];
-
-  const availableUserRoles =
-    contextSessionData?.roles?.map((role) => role.name) || [];
-
-  // console.log("availableUserPermissions", availableUserPermissions);
-  // console.log("requiredPermissions", requiredPermissions);
-  // console.log("availableUserRoles", availableUserRoles);
-  // console.log("requiredRoles", requiredRoles);
-
-  // Caso 1: Solo se requiere que el usuario esté logueado
+  // Cláusula de guarda 2: Verificación de requisitos de acceso. Si la ruta no requiere permisos ni roles específicos, se permite el acceso a cualquier usuario autenticado.
   if (requiredPermissions.length === 0 && requiredRoles.length === 0) {
-    // console.log("Caso 1: Solo se requiere que el usuario esté logueado");
-    return true; // Si no se requieren permisos ni roles, solo se necesita que esté logueado.
+    // prettier-ignore
+    console.log("No se requieren permisos ni roles específicos. Acceso permitido.");
+    return true;
   }
 
-  // Caso 2 y 3: Verificar si el usuario tiene al menos uno de los roles o permisos necesarios
-  const hasRequiredRoles =
-    requiredRoles.length > 0
-      ? requiredRoles.some((role) => {
-          const result = availableUserRoles.includes(role);
-          // console.log(`Verificando rol: ${role}, resultado: ${result}`);
-          return result;
-        })
-      : false; // Se establece como false si no se requiere ningún rol.
+  // Extracción y aplanamiento de datos de permisos y roles:
+  // prettier-ignore
+  const availableUserPermissions = contextSessionData?.permissions?.map((permission) => permission.name) || [];
+  //prettier-ignore
+  const availableUserRoles = contextSessionData?.roles?.map((role) => role.name) || [];
 
-  const hasRequiredPermissions =
-    requiredPermissions.length > 0
-      ? requiredPermissions.some((permission) => {
-          const result = availableUserPermissions?.includes(permission);
-          // console.log(`Verificando permiso: ${permission}, resultado: ${result}`);
-          return result;
-        })
-      : false; // Se establece como false si no se requiere ningún permiso.
+  // console.log("requiredPermissions", requiredPermissions);
+  // console.log("availableUserPermissions", availableUserPermissions);
+  // console.log("requiredRoles", requiredRoles);
+  // console.log("availableUserRoles", availableUserRoles);
 
-  // Caso 4: Autorizar si el usuario cumple con al menos uno de los roles o permisos
-  const isAuthorized = hasRequiredRoles || hasRequiredPermissions;
-  // console.log(`Caso 3 o 4: Usuario autorizado: ${isAuthorized}`);
+  // Verificación de permisos y roles:
+  // prettier-ignore
+  const hasRequiredPermissions = requiredPermissions.length > 0 && requiredPermissions.some((requiredPermission) => {
+      const result = availableUserPermissions.includes(requiredPermission);
+      console.log(`Verificando permiso | Requerido: ${requiredPermission}, Aprobado?: ${result}`);
+      return result;
+    });
+
+  // prettier-ignore
+  const hasRequiredRoles = requiredRoles.length > 0 && requiredRoles.some((requiredRole) => {
+      const result = availableUserRoles.includes(requiredRole);
+      console.log(`Verificando rol | Requerido: ${requiredRole}, Aprobado?: ${result}`);
+      return result;
+    });
+
+  // Evaluación final de autorización:
+  const isAuthorized = hasRequiredPermissions || hasRequiredRoles;
+  console.log(`Evaluación final -> isAuthorized?: ${isAuthorized}`);
+
   return isAuthorized;
-
-  // Ejemplos:
-
-  // Caso 1: Solo requiere que el usuario esté logueado
-
-  /* <Route
-    path="dashboard"
-    element={
-      <ProtectedRoutes
-        isAllowed={isUserAuthorized(contextSessionData)}
-        redirectTo={contextSessionData ? "/unauthorized" : "/login"}
-      >
-        <Dashboard />
-      </ProtectedRoutes>
-    }
-  /> */
-
-  // Caso 2: Requiere que el usuario esté logueado y tenga el rol role1
-
-  /* <Route
-    path="admin"
-    element={
-      <ProtectedRoutes
-        isAllowed={isUserAuthorized(contextSessionData, [], ["role1"])}
-        redirectTo={contextSessionData ? "/unauthorized" : "/login"}
-      >
-        <AdminPanel />
-      </ProtectedRoutes>
-    }
-  /> */
-
-  // Caso 3: Requiere que el usuario esté logueado y tenga el permiso permission1
-
-  /* <Route
-  path="settings"
-  element={
-    <ProtectedRoutes
-      isAllowed={isUserAuthorized(contextSessionData, ["permission1"])}
-      redirectTo={contextSessionData ? "/unauthorized" : "/login"}
-    >
-      <Settings />
-    </ProtectedRoutes>
-  }
-  /> */
-
-  // Caso 4: Requiere que el usuario esté logueado y tenga el rol role1 o el permiso permission1
-
-  /* <Route
-  path="special-feature"
-  element={
-    <ProtectedRoutes
-      isAllowed={isUserAuthorized(contextSessionData, ["permission1"], ["role1"])}
-      redirectTo={contextSessionData ? "/unauthorized" : "/login"}
-    >
-      <SpecialFeature />
-    </ProtectedRoutes>
-  }
-  /> */
-
-  //PRUEBAS REALIZADAS
-
-  //-La ruta solamente pide un permiso - PROBADO
-  //---El usuario no tiene el permiso - OK
-  //---El usuario tiene permiso - OK
-
-  //-La ruta solamente pide un rol - PROBADO
-  //---El usuario no tiene el rol - OK
-  //---El usuario tiene rol - OK
-
-  //-La ruta pide un permiso o un rol - PROBADO
-  //---El usuario no tiene ni el permiso ni el rol - OK
-  //---El usuario tiene permiso - OK
-  //---El usuario tiene el rol - OK
-  //---El usuario tiene el permiso y el rol
 };

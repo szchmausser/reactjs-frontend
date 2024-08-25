@@ -3,7 +3,7 @@ import { CgProfile } from "react-icons/cg";
 import { HiMiniAdjustmentsVertical, HiCloudArrowDown } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/loading/Loading";
-import Error from "../../../components/Error";
+import Error from "../../../components/error/Error.jsx";
 import { fetchCountries } from "./CountriesEndpoints.js";
 
 const CountriesList = () => {
@@ -20,8 +20,7 @@ const CountriesList = () => {
       />
     );
 
-  if (countriesQuery.isError)
-    return <Error error={countriesQuery.error.message} />;
+  if (countriesQuery.isError) return <Error message={countriesQuery.error} />;
 
   return (
     <>
@@ -62,7 +61,23 @@ const CountriesList = () => {
       <ul>
         {/* En el evento onclick de cada pais, es donde se ejecutara la mutacion para eliminar un elemento. */}
         {countriesQuery.data?.data?.map((country) => (
-          <li key={country.id}>{country.name}</li>
+          <li key={country.id}>
+            {country.name}
+            <Link
+              to={`/countries/show/${country.id}`}
+              state={{ country }}
+              className="px-1 ml-2 rounded bg-slate-400"
+            >
+              show
+            </Link>
+            <Link
+              to={`/countries/edit/${country.id}`}
+              state={{ country }}
+              className="px-1 ml-2 rounded bg-slate-400"
+            >
+              edit
+            </Link>
+          </li>
         ))}
       </ul>
     </>

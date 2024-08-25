@@ -1,20 +1,35 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSession } from "../../states/stores/sessionStore";
 
 const Logout = () => {
-  const queryClient = useQueryClient();
-
   const navigate = useNavigate();
+  const { setData, resetData } = useSession();
 
-  const reset = () => {
-    queryClient.clear(); //Borra TODAS las queries de la cache
-    navigate("/login");
-  };
+  useEffect(() => {
+    const performLogout = async () => {
+      // Aquí iría la lógica para hacer logout en el backend si es necesario
 
-  return (
-    <>
-      <button onClick={() => reset()}>Logout</button>
-    </>
-  );
+      // Limpiamos completamente el estado de sesión
+      setData({
+        login: null,
+        user: null,
+        company: null,
+        roles: [],
+        permissions: [],
+      });
+
+      // Resetear completamente el estado
+      resetData();
+
+      // Redirigir al usuario a la página de login
+      navigate("/login");
+    };
+
+    performLogout();
+  }, [setData, resetData, navigate]);
+
+  return <div>Logging out...</div>;
 };
+
 export default Logout;
