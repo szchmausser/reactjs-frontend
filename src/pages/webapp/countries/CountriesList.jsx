@@ -4,20 +4,15 @@ import { HiMiniAdjustmentsVertical, HiCloudArrowDown } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/loading/Loading";
 import Error from "../../../components/Error";
-import axios from "axios";
+import { fetchCountries } from "./CountriesEndpoints.js";
 
-const Test = () => {
-  // const domain = appDomain;
-  const domain = "http://localhost:8103/api";
-  const resource = "/countries";
-  const fetchOptions = null;
-
-  const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["countries-list", domain, resource, fetchOptions],
-    queryFn: () => axios.get(`${domain}${resource}`, fetchOptions),
+const CountriesList = () => {
+  const countriesQuery = useQuery({
+    queryKey: ["countries-list"],
+    queryFn: fetchCountries,
   });
 
-  if (isLoading)
+  if (countriesQuery.isLoading)
     return (
       <Loading
         color={"gray"}
@@ -25,7 +20,8 @@ const Test = () => {
       />
     );
 
-  if (isError) return <Error error={error.message} />;
+  if (countriesQuery.isError)
+    return <Error error={countriesQuery.error.message} />;
 
   return (
     <>
@@ -65,11 +61,11 @@ const Test = () => {
 
       <ul>
         {/* En el evento onclick de cada pais, es donde se ejecutara la mutacion para eliminar un elemento. */}
-        {data?.data?.map((country) => (
+        {countriesQuery.data?.data?.map((country) => (
           <li key={country.id}>{country.name}</li>
         ))}
       </ul>
     </>
   );
 };
-export default Test;
+export default CountriesList;
