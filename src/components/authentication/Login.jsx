@@ -1,20 +1,34 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useSession } from "../../states/stores/sessionStore";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Loading from "../loading/Loading";
-import { Button } from "flowbite-react";
-import {
-  loginUser,
-  fetchUserRoles,
-  fetchUserPermissions,
-} from "./loginEndpoints";
+import { Label, TextInput, Button, Checkbox } from "flowbite-react";
+import { HiMail } from "react-icons/hi";
+import { FaRegBuilding } from "react-icons/fa";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Error from "../error/Error";
+import Loading from "../loading/Loading";
+import { useSession } from "../../states/stores/sessionStore";
+//prettier-ignore
+import {loginUser, fetchUserRoles, fetchUserPermissions} from "./loginEndpoints";
+import { z } from "zod";
 
 const Login = () => {
   const { setData } = useSession();
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState(null);
+  const [loginData, setLoginData] = useState({
+    company: "",
+    email: "",
+    password: "",
+  });
+  // Estado almacenar errores de validación producidos Zod y poder manejarlos en la UI
+  const [validationErrors, setValidationErrors] = useState({});
+
+  // Define el esquema de validación para la libreria Zod
+  const loginSchema = z.object({
+    company: z.number().int().positive(),
+    email: z.string().email(),
+    password: z.string(),
+  });
 
   // Sobre peticiones dependientes:
   // https://tanstack.com/query/latest/docs/framework/react/guides/dependent-queries
@@ -79,18 +93,69 @@ const Login = () => {
     setData,
   ]);
 
-  const handleChangeOnField = (event) => {
-    const { name, value } = event.target;
-    setLoginData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // Función separada para manejar los errores de Zod
+  const handleZodErrors = (zodError) => {
+    // Crea un objeto para almacenar los errores de validación
+    const validationErrorsObject = {};
+
+    // Itera sobre cada error en el objeto ZodError
+    zodError.errors.forEach((individualError) => {
+      // Obtiene el nombre del campo que causó el error
+      const fieldName = individualError.path[0];
+
+      // Obtiene el mensaje de error para este campo
+      const errorMessage = individualError.message;
+
+      // Almacena el mensaje de error en el objeto de errores de validación
+      validationErrorsObject[fieldName] = errorMessage;
+    });
+
+    // Imprime los errores en la consola para depuración
+    console.log("Validation errors:", validationErrorsObject);
+
+    // Actualiza el estado con los errores de validación
+    setValidationErrors(validationErrorsObject);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    loginMutation.mutate(loginData);
+
+    setValidationErrors({}); // Resetea los errores si todo es válido
+
+    // Intentamos validar los datos con el esquema de Zod
+    try {
+      const validatedData = loginSchema.parse(loginData);
+
+      // Si los datos son válidos, ejecutamos la mutación de inicio de sesión
+      loginMutation.mutate(validatedData);
+    } catch (error) {
+      // Si ocurre un error durante la validación, lo manejamos aquí
+      if (error instanceof z.ZodError) {
+        // Llama a una función separada para manejar los errores de Zod
+        handleZodErrors(error);
+      } else {
+        // Si no es un error de Zod, lo registramos en la consola
+        console.error("An unexpected error occurred:", error);
+      }
+    }
   };
+
+  const handleChangeOnField = (event) => {
+    const { name, value } = event.target;
+    setLoginData((prev) => ({
+      ...prev,
+      [name]: name === "company" ? parseInt(value, 10) || "" : value, //manejar el caso en que company no sea un número válido:
+    }));
+  };
+
+  const isSubmitDisabled = useMemo(() => {
+    return (
+      loginMutation.isPending ||
+      !loginData.company ||
+      !loginData.email ||
+      !loginData.password
+    );
+  }, [loginMutation.isPending, loginData]);
 
   if (
     loginMutation.isPending ||
@@ -106,30 +171,93 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="inline-flex gap-1">
-        <input
-          id="company"
-          name="company"
-          type="number"
-          placeholder="Company ID"
-          onChange={handleChangeOnField}
-        />
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="User Email"
-          onChange={handleChangeOnField}
-        />
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="User password"
-          onChange={handleChangeOnField}
-        />
-        <Button color="dark" size="sm" type="submit">
-          Login
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
+        <div className="max-w-md">
+          <div className="block mb-2">
+            <Label
+              htmlFor="company"
+              value="Your company"
+              color={validationErrors?.company ? "failure" : ""}
+            />
+          </div>
+          <TextInput
+            id="company"
+            name="company"
+            type="number"
+            icon={FaRegBuilding}
+            color={validationErrors?.company ? "failure" : ""}
+            onChange={handleChangeOnField}
+            helperText={
+              <>
+                {validationErrors.company && (
+                  <span className="font-medium">Oops! </span>
+                )}
+                {validationErrors.company}
+              </>
+            }
+          />
+        </div>
+
+        <div className="max-w-md">
+          <div className="block mb-2">
+            <Label
+              htmlFor="email"
+              value="Your email"
+              color={validationErrors?.email ? "failure" : ""}
+            />
+          </div>
+          <TextInput
+            id="email"
+            name="email"
+            type="email"
+            placeholder="user@email.tld"
+            icon={HiMail}
+            color={validationErrors?.email ? "failure" : ""}
+            onChange={handleChangeOnField}
+            helperText={
+              <>
+                {validationErrors.email && (
+                  <span className="font-medium">Oops! </span>
+                )}
+                {validationErrors.email}
+              </>
+            }
+          />
+        </div>
+
+        <div className="max-w-md">
+          <div className="block mb-2">
+            <Label
+              htmlFor="password"
+              value="Your password"
+              color={validationErrors?.password ? "failure" : ""}
+            />
+          </div>
+          <TextInput
+            id="password"
+            name="password"
+            type="password"
+            icon={RiLockPasswordLine}
+            color={validationErrors?.password ? "failure" : ""}
+            onChange={handleChangeOnField}
+            helperText={
+              <>
+                {validationErrors.password && (
+                  <span className="font-medium">Oops! </span>
+                )}
+                {validationErrors.password}
+              </>
+            }
+          />
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <Checkbox id="remember" />
+          <Label htmlFor="remember">Remember me</Label>
+        </div>
+
+        <Button type="submit" disabled={isSubmitDisabled}>
+          {loginMutation.isPending ? "Logging in..." : "Submit"}
         </Button>
       </form>
     </>

@@ -8,13 +8,13 @@ import { isUserAuthorized } from "../utils/authUtils";
 import { useSession } from "../states/stores/sessionStore";
 import Register from "../pages/register/Register";
 import Login from "../components/authentication/Login";
+import Logout from "../components/authentication/Logout";
 import Unauthorized from "../pages/unauthorized/Unauthorized";
 import Forbidden from "../pages/forbidden/Forbidden";
 import Kanban from "../pages/kanban/Kanban";
 import Calendar from "../pages/calendar/Calendar";
 import Settings from "../pages/settings/Settings";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword";
-import Logout from "../pages/logout/Logout";
 
 const AppRoutes = () => {
   const { data: contextSessionData } = useSession();

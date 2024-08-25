@@ -61,22 +61,29 @@ const CountriesList = () => {
       <ul>
         {/* En el evento onclick de cada pais, es donde se ejecutara la mutacion para eliminar un elemento. */}
         {countriesQuery.data?.data?.map((country) => (
-          <li key={country.id}>
-            {country.name}
+          <li key={country.id} className="p-1">
             <Link
               to={`/countries/show/${country.id}`}
               state={{ country }}
-              className="px-1 ml-2 rounded bg-slate-400"
+              className="px-1 ml-2 bg-gray-200 rounded border border-black border-solid"
             >
               show
             </Link>
             <Link
               to={`/countries/edit/${country.id}`}
               state={{ country }}
-              className="px-1 ml-2 rounded bg-slate-400"
+              className="px-1 ml-2 bg-gray-200 rounded border border-black border-solid"
             >
               edit
             </Link>
+            <Link
+              to={`/countries/delete/${country.id}`}
+              state={{ country }}
+              className="px-1 ml-2 bg-gray-200 rounded border border-black border-solid"
+            >
+              delete
+            </Link>{" "}
+            - {country.name}
           </li>
         ))}
       </ul>
