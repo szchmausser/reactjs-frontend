@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Label, TextInput, Button, Checkbox } from "flowbite-react";
-import { HiMail } from "react-icons/hi";
+import { MdOutlineAlternateEmail } from "react-icons/md";
 import { FaRegBuilding } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -157,109 +157,126 @@ const Login = () => {
     );
   }, [loginMutation.isPending, loginData]);
 
-  if (
-    loginMutation.isPending ||
-    rolesQuery.isFetching ||
-    permissionsQuery.isFetching
-  ) {
-    return (
-      <Loading color={"gray"} message={"Wait a moment, you are login..."} />
-    );
-  }
-
-  if (loginMutation.isError) return <Error message={loginMutation.error} />;
-
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
-        <div className="max-w-md">
-          <div className="block mb-2">
+      <div className="flex w-full min-h-screen">
+        <div className="container flex flex-wrap px-5 py-24 mx-auto break-words">
+          <div className="overflow-auto mx-auto">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <h1 className="flex justify-center my-8 text-4xl text-gray-400">
+                Login:
+              </h1>
+              {/* <div className="block mb-2">
             <Label
               htmlFor="company"
               value="Your company"
               color={validationErrors?.company ? "failure" : ""}
             />
-          </div>
-          <TextInput
-            id="company"
-            name="company"
-            type="number"
-            icon={FaRegBuilding}
-            color={validationErrors?.company ? "failure" : ""}
-            onChange={handleChangeOnField}
-            helperText={
-              <>
-                {validationErrors.company && (
-                  <span className="font-medium">Oops! </span>
-                )}
-                {validationErrors.company}
-              </>
-            }
-          />
-        </div>
+          </div> */}
+              <TextInput
+                placeholder="Your company_id"
+                id="company"
+                name="company"
+                type="number"
+                icon={FaRegBuilding}
+                color={validationErrors?.company ? "failure" : ""}
+                onChange={handleChangeOnField}
+                helperText={
+                  <>
+                    {validationErrors.company && (
+                      <span className="font-medium">Oops! </span>
+                    )}
+                    {validationErrors.company}
+                  </>
+                }
+                required
+              />
 
-        <div className="max-w-md">
-          <div className="block mb-2">
+              {/* <div className="block mb-2">
             <Label
               htmlFor="email"
               value="Your email"
               color={validationErrors?.email ? "failure" : ""}
             />
-          </div>
-          <TextInput
-            id="email"
-            name="email"
-            type="email"
-            placeholder="user@email.tld"
-            icon={HiMail}
-            color={validationErrors?.email ? "failure" : ""}
-            onChange={handleChangeOnField}
-            helperText={
-              <>
-                {validationErrors.email && (
-                  <span className="font-medium">Oops! </span>
-                )}
-                {validationErrors.email}
-              </>
-            }
-          />
-        </div>
+          </div> */}
+              <TextInput
+                id="email"
+                name="email"
+                type="email"
+                // placeholder="user@email.tld"
+                placeholder="Your email"
+                icon={MdOutlineAlternateEmail}
+                color={validationErrors?.email ? "failure" : ""}
+                onChange={handleChangeOnField}
+                helperText={
+                  <>
+                    {validationErrors.email && (
+                      <span className="font-medium">Oops! </span>
+                    )}
+                    {validationErrors.email}
+                  </>
+                }
+                required
+              />
 
-        <div className="max-w-md">
-          <div className="block mb-2">
+              {/* <div className="block mb-2">
             <Label
               htmlFor="password"
               value="Your password"
               color={validationErrors?.password ? "failure" : ""}
             />
+          </div> */}
+              <TextInput
+                // placeholder="!@#$%^&*?"
+                placeholder="Your password"
+                id="password"
+                name="password"
+                type="password"
+                icon={RiLockPasswordLine}
+                color={validationErrors?.password ? "failure" : ""}
+                onChange={handleChangeOnField}
+                helperText={
+                  <>
+                    {validationErrors.password && (
+                      <span className="font-medium">Oops! </span>
+                    )}
+                    {validationErrors.password}
+                  </>
+                }
+                required
+              />
+
+              <div className="flex gap-2 items-center">
+                <Checkbox id="remember" />
+                <Label htmlFor="remember">Remember me</Label>
+              </div>
+
+              <Button type="submit" disabled={isSubmitDisabled}>
+                {loginMutation.isPending ? "Logging in..." : "Submit"}
+              </Button>
+
+              {/* Loading */}
+              {(loginMutation.isPending ||
+                rolesQuery.isFetching ||
+                permissionsQuery.isFetching) && (
+                <div className="mt-4">
+                  <Loading
+                    color={"blue"}
+                    message={"Wait a moment, you are login..."}
+                  />
+                </div>
+              )}
+
+              {/* Error */}
+              {loginMutation.isError && (
+                <div className="mt-4">
+                  <Error message={loginMutation.error} />
+                </div>
+              )}
+            </form>
           </div>
-          <TextInput
-            id="password"
-            name="password"
-            type="password"
-            icon={RiLockPasswordLine}
-            color={validationErrors?.password ? "failure" : ""}
-            onChange={handleChangeOnField}
-            helperText={
-              <>
-                {validationErrors.password && (
-                  <span className="font-medium">Oops! </span>
-                )}
-                {validationErrors.password}
-              </>
-            }
-          />
         </div>
-
-        <div className="flex gap-2 items-center">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember">Remember me</Label>
-        </div>
-
-        <Button type="submit" disabled={isSubmitDisabled}>
-          {loginMutation.isPending ? "Logging in..." : "Submit"}
-        </Button>
-      </form>
+      </div>
     </>
   );
 };

@@ -349,24 +349,24 @@ const Header = () => {
               </a>
             </div>
             {/* <!-- Apps --> */}
-            <button
+            {/* <button
               type="button"
               data-dropdown-toggle="apps-dropdown"
               className="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
             >
-              <span className="sr-only">View notifications</span>
-              {/* <!-- Icon --> */}
-              <svg
+              <span className="sr-only">View notifications</span> */}
+            {/* <!-- Icon --> */}
+            {/* <svg
                 className="w-6 h-6"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-              </svg>
-            </button>
+              </svg> */}
+            {/* </button> */}
             {/* <!-- Dropdown menu --> */}
-            <div
+            {/* <div
               className="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-white rounded-xl divide-y divide-gray-100 shadow-lg dark:bg-gray-700 dark:divide-gray-600"
               id="apps-dropdown"
             >
@@ -564,7 +564,7 @@ const Header = () => {
                   </div>
                 </a>
               </div>
-            </div>
+            </div> */}
             <button
               type="button"
               className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
