@@ -9,8 +9,10 @@ import Error from "../../../components/error/Error.jsx";
 import { fetchCountries } from "./CountriesEndpoints.js";
 import usePageSize from "../../../hooks/usePageSize";
 import useTableHeight from "../../../hooks/useTableHeight";
+import { useTheme } from "../../../states/stores/themeStore.js";
 
 const CountriesList = () => {
+  const { data: dark } = useTheme();
   const pageSize = usePageSize();
   const tableHeight = useTableHeight();
 
@@ -98,7 +100,11 @@ const CountriesList = () => {
           </div>
 
           <div
-            className="mt-8 ag-theme-quartz"
+            className={
+              dark.darkMode
+                ? "mt-8 ag-theme-quartz-dark"
+                : "mt-8 ag-theme-quartz"
+            }
             style={{ width: "100%", height: tableHeight }}
           >
             <AgGridReact

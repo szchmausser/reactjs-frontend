@@ -1,4 +1,9 @@
+import { IoMoon, IoSunny } from "react-icons/io5"; //Dark mode icons
+import useDarkModeSwitcher from "../../hooks/useDarkModeSwitcher";
+
 const Header = () => {
+  const [darkMode, toggleDarkMode] = useDarkModeSwitcher();
+
   return (
     <>
       <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
@@ -347,6 +352,19 @@ const Header = () => {
                   View all
                 </div>
               </a>
+            </div>
+            <div className="">
+              <button
+                onClick={() => toggleDarkMode()}
+                className="p-2 text-gray-500 rounded-full transition-colors duration-200 dark:text-gray-400"
+                aria-label="Cambiar modo claro/oscuro"
+              >
+                {darkMode ? (
+                  <IoSunny className="w-5 h-5" />
+                ) : (
+                  <IoMoon className="w-5 h-5" />
+                )}
+              </button>
             </div>
             {/* <!-- Apps --> */}
             {/* <button
