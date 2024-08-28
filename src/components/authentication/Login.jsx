@@ -164,7 +164,7 @@ const Login = () => {
         <div className="container flex flex-wrap px-5 py-24 mx-auto break-words">
           <div className="overflow-auto mx-auto w-3/4 md:w-1/2 lg:w-1/3">
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-              <h1 className="flex justify-center my-6 w-full text-4xl text-gray-400">
+              <h1 className="flex justify-center mb-6 w-full text-4xl text-gray-400">
                 Login
               </h1>
               {/* <div className="block mb-2">
@@ -247,7 +247,7 @@ const Login = () => {
                 required
               />
 
-              <div className="flex items-center">
+              <div className="flex justify-center items-center">
                 <Checkbox id="remember" />
                 <Label htmlFor="remember">
                   <span className="ml-2 text-sm text-gray-600">
@@ -259,20 +259,24 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={isSubmitDisabled}
-                className="mt-2 w-full"
+                className="mt-2 max-w-[200px] mx-auto"
               >
                 {loginMutation.isPending ? "Logging in..." : "Submit"}
                 <HiOutlineArrowRight className="ml-2 w-5 h-5" />
               </Button>
 
-              <div className="flex justify-between">
-                <Link to="/register">
+              <div className="inline-flex justify-center mt-3">
+                <Link to="/register" className="flex">
                   <span className="text-sm text-gray-600">
                     Register account
                   </span>
                 </Link>
 
-                <Link to="/forgot-password">
+                <div className="flex items-center text-sm text-center text-gray-600">
+                  <span className="mx-2 text-sm text-gray-600">|</span>
+                </div>
+
+                <Link to="/forgot-password" className="flex justify-end">
                   <span className="text-sm text-gray-600">
                     Recover password
                   </span>

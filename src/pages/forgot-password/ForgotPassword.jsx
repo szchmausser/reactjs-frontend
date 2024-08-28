@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     <>
       <div className="flex w-full min-h-screen">
         <div className="container flex flex-wrap px-5 py-24 mx-auto break-words">
-          <div className="overflow-auto w-full">
+          <div className="w-full">
             <div className="flex justify-end">
               <Link
                 to={-1}

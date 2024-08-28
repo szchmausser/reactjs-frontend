@@ -41,21 +41,21 @@ const CountriesList = () => {
           <Link
             to={`/countries/show/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400"
+            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
           >
             show
           </Link>
           <Link
             to={`/countries/edit/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400"
+            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
           >
             edit
           </Link>
           <Link
             to={`/countries/delete/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400"
+            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
           >
             delete
           </Link>
