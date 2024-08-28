@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -8,33 +7,15 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import Loading from "../../../components/loading/Loading";
 import Error from "../../../components/error/Error.jsx";
 import { fetchCountries } from "./CountriesEndpoints.js";
+import usePageSize from "../../../hooks/usePageSize";
 
 const CountriesList = () => {
-  const [pageSize, setPageSize] = useState(14);
+  const pageSize = usePageSize();
 
   const countriesQuery = useQuery({
     queryKey: ["countries-list"],
     queryFn: fetchCountries,
   });
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setPageSize(8); // sm
-      } else if (window.innerWidth < 768) {
-        setPageSize(10); // md
-      } else if (window.innerWidth < 1024) {
-        setPageSize(12); // lg
-      } else {
-        setPageSize(14); // xl and above
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Call once to set initial size
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   if (countriesQuery.isLoading)
     return (
