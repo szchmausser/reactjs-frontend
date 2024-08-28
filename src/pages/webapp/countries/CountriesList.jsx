@@ -8,9 +8,11 @@ import Loading from "../../../components/loading/Loading";
 import Error from "../../../components/error/Error.jsx";
 import { fetchCountries } from "./CountriesEndpoints.js";
 import usePageSize from "../../../hooks/usePageSize";
+import useTableHeight from "../../../hooks/useTableHeight";
 
 const CountriesList = () => {
   const pageSize = usePageSize();
+  const tableHeight = useTableHeight();
 
   const countriesQuery = useQuery({
     queryKey: ["countries-list"],
@@ -37,21 +39,21 @@ const CountriesList = () => {
           <Link
             to={`/countries/show/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-2 bg-gray-300 rounded border border-gray-400"
+            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400"
           >
             show
           </Link>
           <Link
             to={`/countries/edit/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-2 bg-gray-300 rounded border border-gray-400"
+            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400"
           >
             edit
           </Link>
           <Link
             to={`/countries/delete/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-2 bg-gray-300 rounded border border-gray-400"
+            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400"
           >
             delete
           </Link>
@@ -97,7 +99,7 @@ const CountriesList = () => {
 
           <div
             className="mt-8 ag-theme-quartz"
-            style={{ width: "100%", height: "90%" }}
+            style={{ width: "100%", height: tableHeight }}
           >
             <AgGridReact
               columnDefs={columns}

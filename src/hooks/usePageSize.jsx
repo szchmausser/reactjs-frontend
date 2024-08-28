@@ -7,13 +7,13 @@ const usePageSize = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setPageSize(8); // sm
+        setPageSize(7); // sm
       } else if (window.innerWidth < 768) {
         setPageSize(10); // md
       } else if (window.innerWidth < 1024) {
         setPageSize(12); // lg
       } else {
-        setPageSize(14); // xl and above
+        setPageSize(12); // xl and above
       }
     };
 
