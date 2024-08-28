@@ -1,5 +1,6 @@
+import { HiOutlineArrowRight } from "react-icons/hi";
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Label, TextInput, Button, Checkbox } from "flowbite-react";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { FaRegBuilding } from "react-icons/fa";
@@ -161,10 +162,10 @@ const Login = () => {
     <>
       <div className="flex w-full min-h-screen">
         <div className="container flex flex-wrap px-5 py-24 mx-auto break-words">
-          <div className="overflow-auto mx-auto">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <h1 className="flex justify-center my-8 text-4xl text-gray-400">
-                Login:
+          <div className="overflow-auto mx-auto w-3/4 md:w-1/2 lg:w-1/3">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+              <h1 className="flex justify-center my-6 w-full text-4xl text-gray-400">
+                Login
               </h1>
               {/* <div className="block mb-2">
             <Label
@@ -246,31 +247,55 @@ const Login = () => {
                 required
               />
 
-              <div className="flex gap-2 items-center">
+              <div className="flex items-center">
                 <Checkbox id="remember" />
-                <Label htmlFor="remember">Remember me</Label>
+                <Label htmlFor="remember">
+                  <span className="ml-2 text-sm text-gray-600">
+                    Remember me
+                  </span>
+                </Label>
               </div>
 
-              <Button type="submit" disabled={isSubmitDisabled}>
+              <Button
+                type="submit"
+                disabled={isSubmitDisabled}
+                className="mt-2 w-full"
+              >
                 {loginMutation.isPending ? "Logging in..." : "Submit"}
+                <HiOutlineArrowRight className="ml-2 w-5 h-5" />
               </Button>
+
+              <div className="flex justify-between">
+                <Link to="/register">
+                  <span className="text-sm text-gray-600">
+                    Register account
+                  </span>
+                </Link>
+
+                <Link to="/forgot-password">
+                  <span className="text-sm text-gray-600">
+                    Recover password
+                  </span>
+                </Link>
+              </div>
 
               {/* Loading */}
               {(loginMutation.isPending ||
                 rolesQuery.isFetching ||
                 permissionsQuery.isFetching) && (
-                <div className="mt-4">
+                <div className="mt-4 w-full">
                   <Loading
                     color={"blue"}
                     message={"Wait a moment, you are login..."}
+                    className="w-full"
                   />
                 </div>
               )}
 
               {/* Error */}
               {loginMutation.isError && (
-                <div className="mt-4">
-                  <Error message={loginMutation.error} />
+                <div className="mt-4 w-full">
+                  <Error message={loginMutation.error} className="w-full" />
                 </div>
               )}
             </form>

@@ -26,6 +26,7 @@ const AppRoutes = () => {
         <Route path="*" element={<Forbidden />} />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="setcount" element={<SetCount />} />
 
@@ -43,7 +44,6 @@ const AppRoutes = () => {
         <Route element={
           <ProtectedRoutes isAllowed={isUserAuthorized(contextSessionData, [], [])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}/>}
         >
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/logout" element={<Logout />} />
         </Route>
 
