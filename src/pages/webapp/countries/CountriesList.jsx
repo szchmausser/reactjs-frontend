@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -9,10 +10,31 @@ import Error from "../../../components/error/Error.jsx";
 import { fetchCountries } from "./CountriesEndpoints.js";
 
 const CountriesList = () => {
+  const [pageSize, setPageSize] = useState(14);
+
   const countriesQuery = useQuery({
     queryKey: ["countries-list"],
     queryFn: fetchCountries,
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setPageSize(8); // sm
+      } else if (window.innerWidth < 768) {
+        setPageSize(10); // md
+      } else if (window.innerWidth < 1024) {
+        setPageSize(12); // lg
+      } else {
+        setPageSize(14); // xl and above
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call once to set initial size
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   if (countriesQuery.isLoading)
     return (
@@ -23,8 +45,6 @@ const CountriesList = () => {
     );
 
   if (countriesQuery.isError) return <Error message={countriesQuery.error} />;
-
-  fetchCountries;
 
   // Define the columns for AG Grid
   //prettier-ignore
@@ -95,15 +115,14 @@ const CountriesList = () => {
           </div>
 
           <div
-            className="mt-8 ag-theme-quartz" // applying the Data Grid theme
+            className="mt-8 ag-theme-quartz"
             style={{ width: "100%", height: "90%" }}
-            // style={{ height: "60vh", width: "100%" }} // the Data Grid will fill the size of the parent container
           >
             <AgGridReact
               columnDefs={columns}
               rowData={countriesQuery.data?.data}
               pagination={true}
-              paginationPageSize={14}
+              paginationPageSize={pageSize}
             />
           </div>
         </div>
