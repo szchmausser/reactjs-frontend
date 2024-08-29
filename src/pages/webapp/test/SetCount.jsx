@@ -1,15 +1,13 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useTest } from "../../../states/stores/testStore";
 import { Link } from "react-router-dom";
 import { IoChevronBackCircle } from "react-icons/io5";
 
 const SetCount = () => {
-  const queryClient = useQueryClient();
-  const { data: testData, setData: setTestData } = useTest();
-
-  const reset = () => {
-    queryClient.removeQueries({ queryKey: ["testStore"] });
-  };
+  const {
+    data: testData,
+    setData: setTestData,
+    resetToInitialState,
+  } = useTest();
 
   return (
     <>
@@ -43,7 +41,7 @@ const SetCount = () => {
                 value={testData?.property1 ? testData?.property1 : ""}
               />
             </div>
-            <button onClick={() => reset()}>Limpiar</button>
+            <button onClick={() => resetToInitialState()}>Limpiar</button>
           </div>
         </div>
       </div>

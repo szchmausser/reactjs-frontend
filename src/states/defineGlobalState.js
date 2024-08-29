@@ -57,15 +57,22 @@ export function defineGlobalState(queryKey, initialData = null) {
     }
 
     /**
-     * Resets the global state by invalidating the query and refetching it.
-     * This will cause the query to be fetched again from the server and the
-     * global state to be updated.
+     * Resets the global state to its initial state.
+     * @function
      */
-    function resetData() {
-      queryClient.invalidateQueries({ queryKey: [queryKey] });
-      queryClient.refetchQueries({ queryKey: [queryKey] });
+    function resetToInitialState() {
+      queryClient.setQueryData([queryKey], initialData);
     }
 
-    return { data, setData, resetData };
+    /**
+     * Invalidates the query cache and removes the data from the cache.
+     * The cache will be refetched when the component is rendered again.
+     * @function
+     */
+    function clearData() {
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+    }
+
+    return { data, setData, resetToInitialState, clearData };
   };
 }
