@@ -14,8 +14,11 @@ import {loginUser, fetchUserRoles, fetchUserPermissions} from "./loginEndpoints"
 import { z } from "zod";
 
 const Login = () => {
-  const { setData } = useSession();
   const navigate = useNavigate();
+  const { data, setData } = useSession();
+  const [ultimaRuta, setUltimaRuta] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({});
+
   const [loginData, setLoginData] = useState({
     company: "",
     email: "",
@@ -23,7 +26,6 @@ const Login = () => {
     remember: false,
   });
   // Estado almacenar errores de validación producidos Zod y poder manejarlos en la UI
-  const [validationErrors, setValidationErrors] = useState({});
 
   // Define el esquema de validación para la libreria Zod
   const loginSchema = z.object({
@@ -32,6 +34,22 @@ const Login = () => {
     password: z.string(),
     remember: z.boolean(),
   });
+
+  useEffect(() => {
+    async function readLocalStorage() {
+      const route = await localStorage.getItem("lastRoute");
+      console.log("route", route);
+      if (route) {
+        setUltimaRuta(route);
+      }
+    }
+    readLocalStorage();
+    console.log("ultimaRuta", ultimaRuta);
+  }, [ultimaRuta]);
+
+  useEffect(() => {
+    data?.login?.access_token && navigate(ultimaRuta);
+  }, [navigate, ultimaRuta, data?.login?.access_token]);
 
   // Sobre peticiones dependientes:
   // https://tanstack.com/query/latest/docs/framework/react/guides/dependent-queries
@@ -262,8 +280,8 @@ const Login = () => {
                   id="remember"
                   name="remember"
                   onChange={(event) =>
-                    setLoginData((prev) => ({
-                      ...prev,
+                    setLoginData((prevData) => ({
+                      ...prevData,
                       remember: event.target.checked,
                     }))
                   }

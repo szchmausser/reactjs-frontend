@@ -1,16 +1,28 @@
 import AppRoutes from "./routes/AppRoutes";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useEffect } from "react";
+import { useSession } from "./states/stores/sessionStore";
+import { useLocation } from "react-router-dom";
 
 function App() {
-  const queryClient = new QueryClient();
+  const { setData: setLoginData } = useSession();
+  const location = useLocation();
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AppRoutes />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
+  //Login persistente, restablecer estado de login desde el localStorage
+  useEffect(() => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    if (auth) {
+      setLoginData(auth);
+    }
+  }, [setLoginData]);
+
+  //Probando: Mantener en localstorage la ultima ruta visitada. Esto para tratar de redirigir aqui al refrescar el navegador
+  useEffect(() => {
+    if (location.pathname !== "/login") {
+      localStorage.setItem("lastRoute", location.pathname);
+    }
+  }, [location]);
+
+  return <AppRoutes />;
 }
 
 export default App;

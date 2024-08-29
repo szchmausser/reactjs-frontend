@@ -11,11 +11,12 @@ const useDarkModeSwitcher = () => {
     // console.log("isDarkMode", isDarkMode);
   }, [setDark]);
 
-  const toggleDarkMode = async () => {
+  const toggleDarkMode = () => {
     const newDarkMode = !dark.darkMode;
     setDark({ darkMode: newDarkMode });
     document.documentElement.classList.toggle("dark", newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
+    // console.log("newDarkMode", newDarkMode);
   };
 
   return [dark, toggleDarkMode];

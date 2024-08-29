@@ -1,21 +1,30 @@
-import { Navigate, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Navigate, Outlet } from "react-router-dom";
+import { useSession } from "../../states/stores/sessionStore";
+import { useUserAuthorization } from "../../hooks/useUserAuthorization";
 
-const ProtectedRoutes = ({ isAllowed, children, redirectTo = "/" }) => {
-  // Si isAllowed = false, redirige a la ruta indicada en redirectTo
-  // Si isAllowed = true, devuelve el children o el outlet depende de cual de los 2 se cumpla
+//prettier-ignore
+const ProtectedRoutesV2 = ({requiredRole = [], requiredPermission = [], children }) => {
+  
+  const { data: contextSessionData } = useSession();
+  const isLoggedIn = contextSessionData?.login?.access_token ? true : false;
+  
+  const isUserAuthorizedV2 = useUserAuthorization();
 
-  // Esta logica garantiza/permite proteger rutas individuales, donde en este caso se hace uso del outlet,
-  // o tambien rutas anidadas en las cuales se aplica children
-  // https://youtu.be/42tFXd1PdCk?list=PLG7RuCaZf3UuJxcjyh2QKpl2LciQqvg3Z&t=1201
+  if (!isLoggedIn) {
+    return <Navigate to={"/login"} replace />;
+  } else if (!isUserAuthorizedV2(requiredPermission, requiredRole)) {
+    return <Navigate to={"/unauthorized"} replace />;
+  }
 
-  return !isAllowed ? <Navigate to={redirectTo} /> : children || <Outlet />;
+  return children || <Outlet />;
 };
 
-ProtectedRoutes.propTypes = {
+ProtectedRoutesV2.propTypes = {
+  requiredRole: PropTypes.array,
+  requiredPermission: PropTypes.array,
   isAllowed: PropTypes.bool,
   children: PropTypes.node,
-  redirectTo: PropTypes.string,
 };
 
-export default ProtectedRoutes;
+export default ProtectedRoutesV2;
