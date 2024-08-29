@@ -3,22 +3,23 @@ import Layout from "../layout/Layout";
 import CountryRoutes from "./CountryRoutes";
 import SetCount from "../pages/webapp/test/SetCount";
 import Base from "../pages/base/Base";
-import ProtectedRoutes from "../utils/ProtectedRoutes";
-import { isUserAuthorized } from "../utils/authUtils";
 import { useSession } from "../states/stores/sessionStore";
 import Register from "../pages/register/Register";
 import Login from "../components/authentication/Login";
 import Logout from "../components/authentication/Logout";
-import Unauthorized from "../pages/unauthorized/Unauthorized";
-import Forbidden from "../pages/forbidden/Forbidden";
+import Unauthorized from "../components/unauthorized/Unauthorized";
 import Kanban from "../pages/kanban/Kanban";
 import Calendar from "../pages/calendar/Calendar";
 import Settings from "../pages/settings/Settings";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword";
 import { useEffect } from "react";
+import { useUserAuthorization } from "../hooks/useUserAuthorization";
+import ProtectedRoutes from "../components/authorization/ProtectedRoutes";
+import Forbidden from "../components/forbidden/Forbidden";
 
 const AppRoutes = () => {
   const { data: contextSessionData, setData: setLoginData } = useSession();
+  const isUserAuthorized = useUserAuthorization();
 
   //read localstorage to get login data
   useEffect(() => {
@@ -42,7 +43,7 @@ const AppRoutes = () => {
         {/* Ruta individual privada*/}
         {/* prettier-ignore */}
         <Route path="settings" element={
-          <ProtectedRoutes isAllowed={isUserAuthorized(contextSessionData, [], ["role1"])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}
+          <ProtectedRoutes isAllowed={isUserAuthorized([], ["role1"])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}
         >
             <Settings />
           </ProtectedRoutes>
@@ -51,14 +52,14 @@ const AppRoutes = () => {
         {/* Grupo de rutas privadas*/}
         {/* prettier-ignore */}
         <Route element={
-          <ProtectedRoutes isAllowed={isUserAuthorized(contextSessionData, [], [])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}/>}
+          <ProtectedRoutes isAllowed={isUserAuthorized([], [])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}/>}
         >
           <Route path="/logout" element={<Logout />} />
         </Route>
 
         {/* prettier-ignore */}
         <Route element={
-          <ProtectedRoutes isAllowed={isUserAuthorized(contextSessionData, ["country.list"], ["r1"])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}/>}
+          <ProtectedRoutes isAllowed={isUserAuthorized(["country.list"], ["r1"])} redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}/>}
         >
           <Route path="/kanban" element={<Kanban />} />
           <Route path="/calendar" element={<Calendar />} />
@@ -77,7 +78,7 @@ export default AppRoutes;
 // A1 - Definicion de una ruta privada individual:
 // <Route path="settings" element={
 //   <ProtectedRoutes
-//     isAllowed={isUserAuthorized(contextSessionData, [], ["role1"])}
+//     isAllowed={isUserAuthorized([], ["role1"])}
 //     redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}
 //   >
 //     <Settings />
@@ -88,7 +89,7 @@ export default AppRoutes;
 // <Route
 //  element={
 //    <ProtectedRoutes
-//      isAllowed={isUserAuthorized(contextSessionData, [], [])}
+//      isAllowed={isUserAuthorized([], [])}
 //      redirectTo={contextSessionData?.login?.access_token ? "/unauthorized" : "/login"}
 //    />
 //  }
@@ -100,16 +101,16 @@ export default AppRoutes;
 // B - SOBRE OPCIONES DE AUTORIZACION:
 
 // B1 - No se requiere ningun rol tampoco algun permiso
-// isUserAuthorized(contextSessionData, [], []
+// isUserAuthorized([], []
 
 // B2 - Se requiere un permiso, ningun rol
-// isUserAuthorized(contextSessionData, ["permission1"], []
+// isUserAuthorized(["permission1"], []
 
 // B3 - No se requiere ningun permiso, si un rol
-// isUserAuthorized(contextSessionData, [], ["role1"]
+// isUserAuthorized([], ["role1"]
 
 // B4 - Se requiere alguno de estos roles o permisos, con cumplir alguno, se concede el acceso
-// isUserAuthorized(contextSessionData, [permission1], ["role1"]
+// isUserAuthorized([permission1], ["role1"]
 
 // C - SOBRE DEFINIR RUTAS EN OTRO COMPONENTE:
 

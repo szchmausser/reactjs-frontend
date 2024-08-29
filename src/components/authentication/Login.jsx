@@ -85,12 +85,6 @@ const Login = () => {
 
       setData(authData);
 
-      //save logindata into session storage
-
-      console.log("loginData", loginData);
-
-      //if remember is true save in localstorage
-
       if (remember === true) {
         localStorage.setItem("auth", JSON.stringify(authData));
       }

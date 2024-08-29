@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import Loading from "../../../components/loading/Loading";
 import Error from "../../../components/error/Error.jsx";
-import { fetchCountries } from "./CountriesEndpoints.js";
+import { fetchCountries } from "./apiCountriesEndpoints.js";
 import usePageSize from "../../../hooks/usePageSize";
 import useTableHeight from "../../../hooks/useTableHeight";
 import { useTheme } from "../../../states/stores/themeStore.js";
