@@ -15,9 +15,18 @@ import Kanban from "../pages/kanban/Kanban";
 import Calendar from "../pages/calendar/Calendar";
 import Settings from "../pages/settings/Settings";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword";
+import { useEffect } from "react";
 
 const AppRoutes = () => {
-  const { data: contextSessionData } = useSession();
+  const { data: contextSessionData, setData: setLoginData } = useSession();
+
+  //read localstorage to get login data
+  useEffect(() => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    if (auth) {
+      setLoginData(auth);
+    }
+  }, [setLoginData]);
 
   return (
     <Routes>

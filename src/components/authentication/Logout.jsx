@@ -22,6 +22,9 @@ const Logout = () => {
       // Resetear completamente el estado
       resetData();
 
+      // Limpiamos el localStorage
+      localStorage.clear();
+
       // Redirigir al usuario a la página de login
       navigate("/login");
     };

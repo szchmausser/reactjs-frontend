@@ -20,6 +20,7 @@ const Login = () => {
     company: "",
     email: "",
     password: "",
+    remember: false,
   });
   // Estado almacenar errores de validación producidos Zod y poder manejarlos en la UI
   const [validationErrors, setValidationErrors] = useState({});
@@ -29,6 +30,7 @@ const Login = () => {
     company: z.number().int().positive(),
     email: z.string().email(),
     password: z.string(),
+    remember: z.boolean(),
   });
 
   // Sobre peticiones dependientes:
@@ -44,6 +46,7 @@ const Login = () => {
   const userId = loginMutation.data?.data.data.user.id;
   const companyId = loginData?.company;
   const accessToken = loginMutation.data?.data.data.access_token;
+  const remember = loginData?.remember;
 
   // Llamamos a la peticion dependiente 1
   const rolesQuery = useQuery({
@@ -77,10 +80,22 @@ const Login = () => {
         },
         roles: rolesQuery.data?.data.data.roles || [],
         permissions: permissionsQuery.data?.data.data.permissions || [],
+        remember: loginData.remember,
       };
 
       setData(authData);
-      navigate("/countries");
+
+      //save logindata into session storage
+
+      console.log("loginData", loginData);
+
+      //if remember is true save in localstorage
+
+      if (remember === true) {
+        localStorage.setItem("auth", JSON.stringify(authData));
+      }
+
+      navigate("/");
     }
   }, [
     loginMutation.isSuccess,
@@ -92,6 +107,7 @@ const Login = () => {
     rolesQuery.data,
     navigate,
     setData,
+    remember,
   ]);
 
   // Función separada para manejar los errores de Zod
@@ -112,7 +128,7 @@ const Login = () => {
     });
 
     // Imprime los errores en la consola para depuración
-    console.log("Validation errors:", validationErrorsObject);
+    // console.log("Validation errors:", validationErrorsObject);
 
     // Actualiza el estado con los errores de validación
     setValidationErrors(validationErrorsObject);
@@ -248,7 +264,16 @@ const Login = () => {
               />
 
               <div className="flex justify-center items-center">
-                <Checkbox id="remember" />
+                <Checkbox
+                  id="remember"
+                  name="remember"
+                  onChange={(event) =>
+                    setLoginData((prev) => ({
+                      ...prev,
+                      remember: event.target.checked,
+                    }))
+                  }
+                />
                 <Label htmlFor="remember">
                   <span className="ml-2 text-sm text-gray-600">
                     Remember me
