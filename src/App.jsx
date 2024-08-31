@@ -17,7 +17,7 @@ function App() {
 
   //Probando: Mantener en localstorage la ultima ruta visitada. Esto para tratar de redirigir aqui al refrescar el navegador
   useEffect(() => {
-    if (location.pathname !== "/login") {
+    if (location.pathname !== "/login" && location.pathname !== "/Logout") {
       localStorage.setItem("lastRoute", location.pathname);
     }
   }, [location]);
