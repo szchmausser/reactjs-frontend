@@ -19,11 +19,11 @@ const Logout = () => {
         permissions: [],
       });
 
-      // Resetear completamente el estado
-      resetData();
-
       // Limpiamos el localStorage
       localStorage.clear();
+
+      // Resetear completamente el estado
+      resetData();
 
       // Redirigir al usuario a la página de login
       navigate("/login");

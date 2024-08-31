@@ -13,6 +13,7 @@ import Settings from "../pages/settings/Settings";
 import ForgotPassword from "../pages/forgot-password/ForgotPassword";
 import ProtectedRoutes from "../components/authorization/ProtectedRoutes";
 import Forbidden from "../components/forbidden/Forbidden";
+import ListRecursiveData from "../components/list-recursive-data/ListRecursiveData";
 
 const AppRoutes = () => {
   return (
@@ -40,6 +41,11 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoutes requiredPermission={["permission3"]} requiredRole={[]}/>}>
           <Route path="kanban" element={<Kanban />} />
           <Route path="calendar" element={<Calendar />} />
+        </Route>
+
+        {/* prettier-ignore */}
+        <Route element={<ProtectedRoutes requiredPermission={[]} requiredRole={["role1"]} />}>
+          <Route path="recursive" element={<ListRecursiveData />} />
         </Route>
 
         {/* Inclusion de componente de subrutas CountryRoutes */}

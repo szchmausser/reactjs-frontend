@@ -378,7 +378,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="Logout"
+                    to="logout"
                     className={({ isActive }) =>
                       `${
                         isActive ? "font-bold" : "font-medium"
