@@ -23,7 +23,7 @@ const Logout = () => {
       localStorage.clear();
 
       // Resetear completamente el estado
-      resetData();
+      resetData;
 
       // Redirigir al usuario a la página de login
       navigate("/login");

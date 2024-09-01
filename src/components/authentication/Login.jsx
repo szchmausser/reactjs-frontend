@@ -38,13 +38,13 @@ const Login = () => {
   useEffect(() => {
     async function readLocalStorage() {
       const route = await localStorage.getItem("lastRoute");
-      console.log("route", route);
+      // console.log("route", route);
       if (route) {
         setUltimaRuta(route);
       }
     }
     readLocalStorage();
-    console.log("ultimaRuta", ultimaRuta);
+    // console.log("ultimaRuta", ultimaRuta);
   }, [ultimaRuta]);
 
   useEffect(() => {
