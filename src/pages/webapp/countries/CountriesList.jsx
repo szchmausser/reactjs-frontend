@@ -7,14 +7,10 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import Loading from "../../../components/loading/Loading";
 import Error from "../../../components/error/Error.jsx";
 import { fetchCountries } from "./apiCountriesEndpoints.js";
-import usePageSize from "../../../hooks/usePageSize";
-import useTableHeight from "../../../hooks/useTableHeight";
 import { useTheme } from "../../../states/stores/themeStore.js";
 
 const CountriesList = () => {
   const { data: dark } = useTheme();
-  const pageSize = usePageSize();
-  const tableHeight = useTableHeight();
 
   const countriesQuery = useQuery({
     queryKey: ["countries-list"],
@@ -103,13 +99,13 @@ const CountriesList = () => {
             className={
               dark.darkMode ? "ag-theme-quartz-dark" : "ag-theme-quartz"
             }
-            style={{ width: "100%", height: tableHeight }}
+            style={{ width: "100%", height: "100%" }}
           >
             <AgGridReact
               columnDefs={columns}
               rowData={countriesQuery.data?.data}
               pagination={true}
-              paginationPageSize={pageSize}
+              paginationAutoPageSize={true}
             />
           </div>
         </div>
