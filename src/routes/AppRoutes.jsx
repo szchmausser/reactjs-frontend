@@ -1,58 +1,54 @@
-import { Route, Routes } from "react-router-dom";
-import Layout from "../layout/Layout";
-import CountryRoutes from "./CountryRoutes";
-import SetCount from "../pages/webapp/test/SetCount";
 import Base from "../pages/base/Base";
+import Forbidden from "../components/forbidden/Forbidden";
 import Register from "../pages/register/Register";
 import Login from "../components/authentication/Login";
-import Logout from "../components/authentication/Logout";
+import ForgotPassword from "../pages/forgot-password/ForgotPassword";
 import Unauthorized from "../components/unauthorized/Unauthorized";
+import SetCount from "../pages/webapp/test/SetCount";
+import ProtectedRoutes from "../components/authorization/ProtectedRoutes";
+import Logout from "../components/authentication/Logout";
+import Settings from "../pages/settings/Settings";
+import ListRecursiveData from "../components/list-recursive-data/ListRecursiveData";
 import Kanban from "../pages/kanban/Kanban";
 import Calendar from "../pages/calendar/Calendar";
-import Settings from "../pages/settings/Settings";
-import ForgotPassword from "../pages/forgot-password/ForgotPassword";
-import ProtectedRoutes from "../components/authorization/ProtectedRoutes";
-import Forbidden from "../components/forbidden/Forbidden";
-import ListRecursiveData from "../components/list-recursive-data/ListRecursiveData";
 
-const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Base />} />
-        <Route path="*" element={<Forbidden />} />
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
-        <Route path="forgot-password" element={<ForgotPassword />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
-        <Route path="setcount" element={<SetCount />} />
+const AppRoutes = [
+  //Rutas publicas, sin autenticación, ni roles o permisos requeridos
+  { index: true, element: <Base /> },
+  { path: "*", element: <Forbidden /> },
+  { path: "register", element: <Register /> },
+  { path: "login", element: <Login /> },
+  { path: "forgot-password", element: <ForgotPassword /> },
+  { path: "unauthorized", element: <Unauthorized /> },
+  { path: "setcount", element: <SetCount /> },
 
-        {/* prettier-ignore */}
-        <Route element={<ProtectedRoutes requiredPermission={[]} requiredRole={["role1"]} />}>
-          <Route path="settings" element={<Settings />} />
-        </Route>
+  //Para esta ruta no se especifican roles ni permisos requeridos. Solo requiere que el usuario este logueado para accederlas.
+  {
+    element: <ProtectedRoutes requiredPermission={[]} requiredRole={[]} />,
+    children: [{ path: "logout", element: <Logout /> }],
+  },
 
-        {/* prettier-ignore */}
-        <Route element={<ProtectedRoutes requiredPermission={[]} requiredRole={[]} />}>
-          <Route path="logout" element={<Logout />} />
-        </Route>
-
-        {/* prettier-ignore */}
-        <Route element={<ProtectedRoutes requiredPermission={["permission3"]} requiredRole={[]}/>}>
-          <Route path="kanban" element={<Kanban />} />
-          <Route path="calendar" element={<Calendar />} />
-        </Route>
-
-        {/* prettier-ignore */}
-        <Route element={<ProtectedRoutes requiredPermission={[]} requiredRole={["role1"]} />}>
-          <Route path="recursive" element={<ListRecursiveData />} />
-        </Route>
-
-        {/* Inclusion de componente de subrutas CountryRoutes */}
-        <Route path="countries/*" element={<CountryRoutes />} />
-      </Route>
-    </Routes>
-  );
-};
+  // Grupo de rutas sin path determinado. Requieren autenticacion + permisos y/o roles.
+  // La autenticacion y autorizacion es comun a todas las rutas internas.
+  // En el children se definen las rutas de forma individual.
+  {
+    element: (
+      <ProtectedRoutes requiredPermission={[]} requiredRole={["role1"]} />
+    ),
+    children: [
+      { path: "settings", element: <Settings /> },
+      { path: "recursive", element: <ListRecursiveData /> },
+    ],
+  },
+  {
+    element: (
+      <ProtectedRoutes requiredPermission={["permission3"]} requiredRole={[]} />
+    ),
+    children: [
+      { path: "kanban", element: <Kanban /> },
+      { path: "calendar", element: <Calendar /> },
+    ],
+  },
+];
 
 export default AppRoutes;
