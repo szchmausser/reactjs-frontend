@@ -19,25 +19,16 @@ const Login = () => {
   const [ultimaRuta, setUltimaRuta] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
 
-  const [loginData, setLoginData] = useState({
-    company: "",
-    email: "",
-    password: "",
-    remember: false,
-  });
-  // Estado almacenar errores de validación producidos Zod y poder manejarlos en la UI
-
-  // Define el esquema de validación para la libreria Zod
-  const loginSchema = z.object({
-    company: z.number().int().positive(),
-    email: z.string().email(),
-    password: z.string(),
-    remember: z.boolean(),
-  });
-
+  // Efectos para redireccionar al usuario tras un refresco de página: Esta funcionalidad es necesaria porque las rutas
+  // privadas requieren autenticación y ciertos roles o permisos. Al refrescar la página, los datos de la sesión no están
+  // disponibles en el estado global de la sesion, lo que provoca que el usuario sea redirigido a la ruta de inicio de sesión.
+  // Por lo tanto, se implementan estos efectos para recuperar la última ruta visitada y redirigir al usuario a ella.
+  // Primero, un efecto se ejecuta al renderizar el componente, leyendo la última ruta del localStorage y almacenándola
+  // en el estado. Luego, otro efecto verifica si hay un token en el estado global de la sesion; si existe, redirige al
+  // usuario a la última ruta guardada.
   useEffect(() => {
     async function readLocalStorage() {
-      const route = await localStorage.getItem("lastRoute");
+      const route = localStorage.getItem("lastRoute");
       // console.log("route", route);
       if (route) {
         setUltimaRuta(route);
@@ -51,16 +42,29 @@ const Login = () => {
     data?.login?.access_token && navigate(ultimaRuta);
   }, [navigate, ultimaRuta, data?.login?.access_token]);
 
-  // Sobre peticiones dependientes:
-  // https://tanstack.com/query/latest/docs/framework/react/guides/dependent-queries
+  // Estado almacenar errores de validación producidos Zod y poder manejarlos en la UI
+  const [loginData, setLoginData] = useState({
+    company: "",
+    email: "",
+    password: "",
+    remember: false,
+  });
 
+  // Define el esquema de validación para la libreria Zod
+  const loginSchema = z.object({
+    company: z.number().int().positive(),
+    email: z.string().email(),
+    password: z.string(),
+    remember: z.boolean(),
+  });
+
+  // Sobre peticiones dependientes: https://tanstack.com/query/latest/docs/framework/react/guides/dependent-queries
   // Llamamos a la peticion inicial
   const loginMutation = useMutation({
     mutationFn: loginUser,
   });
 
-  // De loginMutation, extraemos algunos valores de la respuesta para reusarlos y hacer
-  // mas legible el codigo de las peticiones dependientes
+  // De loginMutation, extraemos algunos valores de la respuesta para reusarlos y hacer mas legible el codigo de las peticiones dependientes
   const userId = loginMutation.data?.data.data.user.id;
   const companyId = loginData?.company;
   const accessToken = loginMutation.data?.data.data.access_token;
