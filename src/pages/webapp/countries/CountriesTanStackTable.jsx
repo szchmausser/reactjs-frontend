@@ -4,17 +4,18 @@ import { IoChevronBackCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Error from "../../../components/error/Error.jsx";
 import Loading from "../../../components/loading/Loading";
-import CountryTable from "./CountryTable.jsx";
+import TanStackTable from "../../../components/tan-stack-table/TanStackTable";
 import { fetchCountries } from "./apiCountriesEndpoints.js";
 
 const CountriesTanStackTable = () => {
+  // Fetch using TanStack query and get data for TanStack table
   const countriesQuery = useQuery({
     queryKey: ["countries-list"],
     queryFn: fetchCountries,
   });
 
   // Define the columns for TanStack table
-  const tscolumns = useMemo(
+  const columns = useMemo(
     () => [
       { header: "Id", accessorKey: "id" },
       {
@@ -101,7 +102,7 @@ const CountriesTanStackTable = () => {
             </Link>
           </div>
 
-          <CountryTable columns={tscolumns} data={countriesQuery.data?.data} />
+          <TanStackTable columns={columns} data={countriesQuery.data?.data} />
         </div>
       </div>
     </div>
