@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { FaEdit } from "react-icons/fa";
+import { GrScorecard } from "react-icons/gr";
 import { IoChevronBackCircle } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
-import Error from "../../../components/error/Error.jsx";
-import Loading from "../../../components/loading/Loading.jsx";
-import TanStackTableClientSidePagination from "../../../components/tan-stack-table/TanStackTableClientSidePagination.jsx";
+import Error from "../../../components/error/Error";
+import Loading from "../../../components/loading/Loading";
+import TanStackTableClientSidePagination from "../../../components/tan-stack-table/TanStackTableClientSidePagination";
 import { fetchCountries } from "./apiCountriesEndpoints.js";
 
 const CountriesTanStackTablePaginateClientSideData = () => {
@@ -17,6 +20,37 @@ const CountriesTanStackTablePaginateClientSideData = () => {
   // Define the columns for TanStack table
   const columns = useMemo(
     () => [
+      {
+        header: "Actions",
+        accessorKey: "id",
+        cell: ({ row }) => {
+          return (
+            <div className="inline-flex gap-2">
+              <Link
+                state={{ country: row.original }}
+                to={`/countries/show/${row.original.id}`}
+                className="p-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+              >
+                <GrScorecard />
+              </Link>
+              <Link
+                state={{ country: row.original }}
+                to={`/countries/edit/${row.original.id}`}
+                className="p-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+              >
+                <FaEdit />
+              </Link>
+              <Link
+                state={{ country: row.original }}
+                to={`/countries/delete/${row.original.id}`}
+                className="p-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+              >
+                <MdDeleteOutline />
+              </Link>
+            </div>
+          );
+        },
+      },
       { header: "Id", accessorKey: "id" },
       {
         header: "Numeric Code",

@@ -2,12 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
+import { FaEdit } from "react-icons/fa";
+import { GrScorecard } from "react-icons/gr";
 import { IoChevronBackCircle } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
-import Error from "../../../components/error/Error.jsx";
-import Loading from "../../../components/loading/Loading.jsx";
-import { useTheme } from "../../../states/stores/themeStore.js";
-import { fetchCountries } from "./apiCountriesEndpoints.js";
+import Error from "../../../components/error/Error";
+import Loading from "../../../components/loading/Loading";
+import { useTheme } from "../../../states/stores/themeStore";
+import { fetchCountries } from "./apiCountriesEndpoints";
 
 const CountriesListAgGrid = () => {
   const { data: dark } = useTheme();
@@ -22,27 +25,27 @@ const CountriesListAgGrid = () => {
     {
       headerName: "Actions",
       cellRenderer: (params) => (
-        <div>
+        <div className="inline-flex gap-2 pt-2">
           <Link
+            state={{ country: params.data }}
             to={`/countries/show/${params.data.id}`}
-            state={{ country: params.data }}
-            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
           >
-            show
+            <GrScorecard />
           </Link>
           <Link
+            state={{ country: params.data }}
             to={`/countries/edit/${params.data.id}`}
-            state={{ country: params.data }}
-            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
           >
-            edit
+            <FaEdit />
           </Link>
           <Link
-            to={`/countries/delete/${params.data.id}`}
             state={{ country: params.data }}
-            className="px-1 ml-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+            to={`/countries/delete/${params.data.id}`}
+            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
           >
-            delete
+            <MdDeleteOutline />
           </Link>
         </div>
       ),
