@@ -29,21 +29,21 @@ const CountriesListAgGrid = () => {
           <Link
             state={{ country: params.data }}
             to={`/countries/show/${params.data.id}`}
-            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:text-gray-400 dark:bg-gray-800"
           >
             <GrScorecard />
           </Link>
           <Link
             state={{ country: params.data }}
             to={`/countries/edit/${params.data.id}`}
-            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:text-gray-400 dark:bg-gray-800"
           >
             <FaEdit />
           </Link>
           <Link
             state={{ country: params.data }}
             to={`/countries/delete/${params.data.id}`}
-            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+            className="p-1 text-gray-500 bg-gray-300 rounded border border-gray-400 dark:text-gray-400 dark:bg-gray-800"
           >
             <MdDeleteOutline />
           </Link>

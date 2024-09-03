@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaPlusCircle } from "react-icons/fa";
 import { GrScorecard } from "react-icons/gr";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Error from "../../../components/error/Error";
 import Loading from "../../../components/loading/Loading";
 import TanStackTableClientSidePagination from "../../../components/tan-stack-table/TanStackTableClientSidePagination";
-import { fetchCountries } from "./apiCountriesEndpoints.js";
+import { fetchCountries } from "./apiCountriesEndpoints";
 
 const CountriesTanStackTablePaginateClientSideData = () => {
   // Fetch using TanStack query and get data for TanStack table
@@ -29,21 +29,21 @@ const CountriesTanStackTablePaginateClientSideData = () => {
               <Link
                 state={{ country: row.original }}
                 to={`/countries/show/${row.original.id}`}
-                className="p-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+                className="p-1 bg-gray-300 rounded border border-gray-500 dark:bg-gray-800"
               >
                 <GrScorecard />
               </Link>
               <Link
                 state={{ country: row.original }}
                 to={`/countries/edit/${row.original.id}`}
-                className="p-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+                className="p-1 bg-gray-300 rounded border border-gray-500 dark:bg-gray-800"
               >
                 <FaEdit />
               </Link>
               <Link
                 state={{ country: row.original }}
                 to={`/countries/delete/${row.original.id}`}
-                className="p-1 bg-gray-300 rounded border border-gray-400 dark:bg-gray-700"
+                className="p-1 bg-gray-300 rounded border border-gray-500 dark:bg-gray-800"
               >
                 <MdDeleteOutline />
               </Link>
@@ -124,7 +124,16 @@ const CountriesTanStackTablePaginateClientSideData = () => {
     <div className="flex w-full min-h-screen">
       <div className="container flex flex-wrap px-5 py-24 mx-auto break-words">
         <div className="w-full">
-          <div className="flex justify-end">
+          <div className="flex gap-2 justify-end">
+            <Link
+              to={"/countries/create"}
+              className="px-4 py-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+            >
+              <div className="inline-flex justify-start items-center">
+                <FaPlusCircle />
+                <span className="hidden ml-2 md:block">New</span>
+              </div>
+            </Link>
             <Link
               to={-1}
               className="px-4 py-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"

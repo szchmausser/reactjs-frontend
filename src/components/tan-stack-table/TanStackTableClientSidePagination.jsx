@@ -14,7 +14,7 @@ const TanStackTableClientSidePagination = ({ columns, data }) => {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 7, // Set the initial page size
+        pageSize: 8, // Set the initial page size
         pageIndex: 0, // Set the initial page index
       },
     },
