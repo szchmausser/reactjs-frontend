@@ -1,17 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Error from "../../../components/error/Error.jsx";
-import Loading from "../../../components/loading/Loading";
-import TanStackTable from "../../../components/tan-stack-table/TanStackTable";
-import { fetchCountries } from "./apiCountriesEndpoints.js";
+import Loading from "../../../components/loading/Loading.jsx";
+import TanStackTableServerSidePagination from "../../../components/tan-stack-table/TanStackTableServerSidePagination.jsx";
+import { fetchCountriesPaginated } from "./apiCountriesEndpoints.js";
 
-const CountriesTanStackTable = () => {
-  // Fetch using TanStack query and get data for TanStack table
+const CountriesTanStackTablePaginateServerSideData = () => {
+  const defaultPageSize = 7; // Definimos el tamaño de página por defecto
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: defaultPageSize, // Usamos el tamaño de página por defecto
+  });
+
+  const handlePaginationChange = (newPagination) => {
+    setPagination(newPagination);
+  };
+
   const countriesQuery = useQuery({
-    queryKey: ["countries-list"],
-    queryFn: fetchCountries,
+    queryKey: ["countries-list", pagination.pageIndex, pagination.pageSize],
+    queryFn: () =>
+      fetchCountriesPaginated(pagination.pageIndex + 1, pagination.pageSize),
+    staleTime: 1000 * 60,
+    keepPreviousData: true,
   });
 
   // Define the columns for TanStack table
@@ -102,11 +115,18 @@ const CountriesTanStackTable = () => {
             </Link>
           </div>
 
-          <TanStackTable columns={columns} data={countriesQuery.data?.data} />
+          <TanStackTableServerSidePagination
+            data={countriesQuery.data?.data.data}
+            columns={columns}
+            pageCount={countriesQuery.data?.data.last_page || 0}
+            pagination={pagination}
+            onPaginationChange={handlePaginationChange}
+            defaultPageSize={pagination.pageSize} // Pasamos el tamaño de página por defecto
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export default CountriesTanStackTable;
+export default CountriesTanStackTablePaginateServerSideData;

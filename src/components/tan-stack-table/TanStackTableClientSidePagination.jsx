@@ -1,12 +1,12 @@
-import PropTypes from "prop-types";
 import {
-  useReactTable,
+  flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  flexRender,
+  useReactTable,
 } from "@tanstack/react-table";
+import PropTypes from "prop-types";
 
-const TanStackTable = ({ columns, data }) => {
+const TanStackTableClientSidePagination = ({ columns, data }) => {
   const table = useReactTable({
     data,
     columns,
@@ -97,7 +97,7 @@ const TanStackTable = ({ columns, data }) => {
           }}
           className="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200"
         >
-          {[5, 7, 10, 20, 30, 40, 50].map((pageSize) => (
+          {[5, 10, 20, 30, 40, 50, 100, 250, 500, 1000].map((pageSize) => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
@@ -108,9 +108,9 @@ const TanStackTable = ({ columns, data }) => {
   );
 };
 
-TanStackTable.propTypes = {
+TanStackTableClientSidePagination.propTypes = {
   columns: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
 };
 
-export default TanStackTable;
+export default TanStackTableClientSidePagination;

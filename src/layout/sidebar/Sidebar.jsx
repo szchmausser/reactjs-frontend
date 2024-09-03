@@ -154,14 +154,32 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="tanstack-table-list"
+                    to="tan-stack-table-paginate-client-side-data"
                     className={({ isActive }) =>
                       `${
                         isActive ? "font-bold" : "font-medium"
                       } flex items-center p-2 pl-11 w-full text-base text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`
                     }
                   >
-                    TanStack Table
+                    TanStack Table Paginate Client Side Data
+                  </NavLink>
+                  {/* <a
+                    href="#"
+                    className="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Settings
+                  </a> */}
+                </li>
+                <li>
+                  <NavLink
+                    to="tan-stack-table-paginate-server-side-data"
+                    className={({ isActive }) =>
+                      `${
+                        isActive ? "font-bold" : "font-medium"
+                      } flex items-center p-2 pl-11 w-full text-base text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`
+                    }
+                  >
+                    TanStack Table Paginate Server Side Data
                   </NavLink>
                   {/* <a
                     href="#"

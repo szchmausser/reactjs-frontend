@@ -11,8 +11,9 @@ import Settings from "../pages/settings/Settings";
 import ListRecursiveData from "../components/list-recursive-data/ListRecursiveData";
 import Kanban from "../pages/kanban/Kanban";
 import Calendar from "../pages/calendar/Calendar";
-import CountriesTanStackTable from "../pages/webapp/countries/CountriesTanStackTable";
 import CountriesListAgGrid from "../pages/webapp/countries/CountriesListAgGrid";
+import CountriesTanStackTablePaginateClientSideData from "../pages/webapp/countries/CountriesTanStackTablePaginateClientSideData";
+import CountriesTanStackTablePaginateServerSideData from "../pages/webapp/countries/CountriesTanStackTablePaginateServerSideData";
 
 const AppRoutes = [
   //Rutas publicas, sin autenticación, ni roles o permisos requeridos
@@ -41,7 +42,14 @@ const AppRoutes = [
       { path: "settings", element: <Settings /> },
       { path: "recursive", element: <ListRecursiveData /> },
       { path: "ag-grid-list", element: <CountriesListAgGrid /> },
-      { path: "tanstack-table-list", element: <CountriesTanStackTable /> },
+      {
+        path: "tan-stack-table-paginate-client-side-data",
+        element: <CountriesTanStackTablePaginateClientSideData />,
+      },
+      {
+        path: "tan-stack-table-paginate-server-side-data",
+        element: <CountriesTanStackTablePaginateServerSideData />,
+      },
     ],
   },
   {
