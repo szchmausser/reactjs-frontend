@@ -11,7 +11,8 @@ import Settings from "../pages/settings/Settings";
 import ListRecursiveData from "../components/list-recursive-data/ListRecursiveData";
 import Kanban from "../pages/kanban/Kanban";
 import Calendar from "../pages/calendar/Calendar";
-import CountryTable from "../pages/webapp/countries/CountryTable";
+import CountriesTanStackTable from "../pages/webapp/countries/CountriesTanStackTable";
+import CountriesListAgGrid from "../pages/webapp/countries/CountriesListAgGrid";
 
 const AppRoutes = [
   //Rutas publicas, sin autenticación, ni roles o permisos requeridos
@@ -39,7 +40,8 @@ const AppRoutes = [
     children: [
       { path: "settings", element: <Settings /> },
       { path: "recursive", element: <ListRecursiveData /> },
-      { path: "tanstack-table", element: <CountryTable /> },
+      { path: "ag-grid-list", element: <CountriesListAgGrid /> },
+      { path: "tanstack-table-list", element: <CountriesTanStackTable /> },
     ],
   },
   {
