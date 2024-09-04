@@ -1,21 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { FaEdit, FaPlusCircle } from "react-icons/fa";
-import { GrScorecard } from "react-icons/gr";
+import { useState } from "react";
+import { FaPlusCircle } from "react-icons/fa";
 import { IoChevronBackCircle } from "react-icons/io5";
-import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Error from "../../../components/error/Error";
 import Loading from "../../../components/loading/Loading";
 import TanStackTableServerSidePagination from "../../../components/tan-stack-table/TanStackTableServerSidePagination";
 import { fetchCountriesPaginated } from "./apiCountriesEndpoints";
+import { useTanStackColumnDefinitionsCountriesTable } from "./useTanStackColumnDefinitionsCountriesTable";
 
 const CountriesTanStackTablePaginateServerSideData = () => {
-  const defaultPageSize = 8; // Definimos el tamaño de página por defecto
-
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: defaultPageSize, // Usamos el tamaño de página por defecto
+    pageSize: 8, // Usamos el tamaño de página por defecto
   });
 
   const handlePaginationChange = (newPagination) => {
@@ -30,98 +27,11 @@ const CountriesTanStackTablePaginateServerSideData = () => {
     keepPreviousData: true,
   });
 
+  // Definimos los datos para la tabla
+  const tableData = countriesQuery.data?.data;
+
   // Define the columns for TanStack table
-  const columns = useMemo(
-    () => [
-      {
-        header: "Actions",
-        accessorKey: "id",
-        cell: ({ row }) => {
-          return (
-            <div className="inline-flex gap-2">
-              <Link
-                state={{ country: row.original }}
-                to={`/countries/show/${row.original.id}`}
-                className="p-1 bg-gray-300 rounded border border-gray-500 dark:bg-gray-800"
-              >
-                <GrScorecard />
-              </Link>
-              <Link
-                state={{ country: row.original }}
-                to={`/countries/edit/${row.original.id}`}
-                className="p-1 bg-gray-300 rounded border border-gray-500 dark:bg-gray-800"
-              >
-                <FaEdit />
-              </Link>
-              <Link
-                state={{ country: row.original }}
-                to={`/countries/delete/${row.original.id}`}
-                className="p-1 bg-gray-300 rounded border border-gray-500 dark:bg-gray-800"
-              >
-                <MdDeleteOutline />
-              </Link>
-            </div>
-          );
-        },
-      },
-      { header: "Id", accessorKey: "id" },
-      {
-        header: "Numeric Code",
-        accessorKey: "numeric_code",
-      },
-      { header: "Name", accessorKey: "name" },
-      {
-        header: "Nationality",
-        accessorKey: "nationality",
-      },
-      {
-        header: "Capital",
-        accessorKey: "capital",
-      },
-      { header: "Native", accessorKey: "native" },
-      {
-        header: "Phone Code",
-        accessorKey: "phone_code",
-      },
-      {
-        header: "Currency",
-        accessorKey: "currency",
-      },
-      {
-        header: "Currency Name",
-        accessorKey: "currency_name",
-      },
-      {
-        header: "Currency Symbol",
-        accessorKey: "currency_symbol",
-      },
-      {
-        header: "Region Id",
-        accessorKey: "region_id",
-      },
-      { header: "Region", accessorKey: "region" },
-      {
-        header: "Subregion Id",
-        accessorKey: "subregion_id",
-      },
-      {
-        header: "Subregion",
-        accessorKey: "subregion",
-      },
-      {
-        header: "Latitude",
-        accessorKey: "latitude",
-      },
-      {
-        header: "Longitude",
-        accessorKey: "longitude",
-      },
-      { header: "Tld", accessorKey: "tld" },
-      { header: "Iso2", accessorKey: "iso2" },
-      { header: "Iso3", accessorKey: "iso3" },
-    ],
-    []
-  );
+  const tableColumns = useTanStackColumnDefinitionsCountriesTable();
 
   if (countriesQuery.isLoading)
     return (
@@ -159,9 +69,9 @@ const CountriesTanStackTablePaginateServerSideData = () => {
           </div>
 
           <TanStackTableServerSidePagination
-            data={countriesQuery.data?.data.data}
-            columns={columns}
-            pageCount={countriesQuery.data?.data.last_page || 0}
+            data={tableData.data}
+            columns={tableColumns}
+            pageCount={tableData.last_page || 0}
             pagination={pagination}
             onPaginationChange={handlePaginationChange}
             defaultPageSize={pagination.pageSize} // Pasamos el tamaño de página por defecto
