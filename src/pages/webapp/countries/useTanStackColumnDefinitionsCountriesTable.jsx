@@ -9,6 +9,7 @@ export const useTanStackColumnDefinitionsCountriesTable = () => {
     () => [
       {
         header: "Actions",
+        footer: "Actions",
         accessorKey: "id",
         cell: ({ row }) => {
           return (
@@ -38,61 +39,73 @@ export const useTanStackColumnDefinitionsCountriesTable = () => {
           );
         },
       },
-      { header: "Id", accessorKey: "id" },
+      { header: "Id", footer: "Id", accessorKey: "id" },
       {
         header: "Numeric Code",
+        footer: "Numeric Code",
         accessorKey: "numeric_code",
       },
-      { header: "Name", accessorKey: "name" },
+      { header: "Name", footer: "Name", accessorKey: "name" },
       {
         header: "Nationality",
+        footer: "Nationality",
         accessorKey: "nationality",
       },
       {
         header: "Capital",
+        footer: "Capital",
         accessorKey: "capital",
       },
-      { header: "Native", accessorKey: "native" },
+      { header: "Native", footer: "Native", accessorKey: "native" },
       {
         header: "Phone Code",
+        footer: "Phone Code",
         accessorKey: "phone_code",
       },
       {
         header: "Currency",
+        footer: "Currency",
         accessorKey: "currency",
       },
       {
         header: "Currency Name",
+        footer: "Currency Name",
         accessorKey: "currency_name",
       },
       {
         header: "Currency Symbol",
+        footer: "Currency Symbol",
         accessorKey: "currency_symbol",
       },
       {
         header: "Region Id",
+        footer: "Region Id",
         accessorKey: "region_id",
       },
-      { header: "Region", accessorKey: "region" },
+      { header: "Region", footer: "Region", accessorKey: "region" },
       {
         header: "Subregion Id",
+        footer: "Subregion Id",
         accessorKey: "subregion_id",
       },
       {
         header: "Subregion",
+        footer: "Subregion",
         accessorKey: "subregion",
       },
       {
         header: "Latitude",
+        footer: "Latitude",
         accessorKey: "latitude",
       },
       {
         header: "Longitude",
+        footer: "Longitude",
         accessorKey: "longitude",
       },
-      { header: "Tld", accessorKey: "tld" },
-      { header: "Iso2", accessorKey: "iso2" },
-      { header: "Iso3", accessorKey: "iso3" },
+      { header: "Tld", footer: "Tld", accessorKey: "tld" },
+      { header: "Iso2", footer: "Iso2", accessorKey: "iso2" },
+      { header: "Iso3", footer: "Iso3", accessorKey: "iso3" },
     ],
     []
   );

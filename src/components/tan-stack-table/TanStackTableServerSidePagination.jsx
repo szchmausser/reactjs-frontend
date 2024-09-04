@@ -65,6 +65,20 @@ const TanStackTableServerSidePagination = ({
               </tr>
             ))}
           </tbody>
+          <tfoot className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+            {table.getFooterGroups().map((footerGroup) => (
+              <tr key={footerGroup.id}>
+                {footerGroup.headers.map((footer) => (
+                  <th key={footer.id} scope="col" className="px-6 py-3">
+                    {flexRender(
+                      footer.column.columnDef.footer,
+                      footer.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </tfoot>
         </table>
       </div>
       <div className="flex justify-between items-center p-4">
