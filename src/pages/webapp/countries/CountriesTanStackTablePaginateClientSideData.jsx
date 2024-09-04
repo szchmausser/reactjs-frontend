@@ -7,16 +7,22 @@ import Loading from "../../../components/loading/Loading";
 import TanStackTableClientSidePagination from "../../../components/tan-stack-table/TanStackTableClientSidePagination";
 import { fetchCountries } from "./apiCountriesEndpoints";
 import { useTanStackColumnDefinitionsCountriesTable } from "./useTanStackColumnDefinitionsCountriesTable";
+import { useMemo } from "react";
 
 const CountriesTanStackTablePaginateClientSideData = () => {
   // Fetch using TanStack query and get data for TanStack table
   const countriesQuery = useQuery({
     queryKey: ["countries-list"],
     queryFn: fetchCountries,
+    refetchInterval: 1000 * 60,
+    keepPreviousData: true,
   });
 
   // Definimos los datos para la tabla
-  const tableData = countriesQuery.data?.data;
+  const tableData = useMemo(
+    () => countriesQuery.data?.data,
+    [countriesQuery.data]
+  ); // Se recomiendo memoizar
 
   // Define the columns for TanStack table
   const tableColumns = useTanStackColumnDefinitionsCountriesTable();

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ import { useTanStackColumnDefinitionsCountriesTable } from "./useTanStackColumnD
 const CountriesTanStackTablePaginateServerSideData = () => {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 8, // Usamos el tamaño de página por defecto
+    pageSize: 5, // Usamos el tamaño de página por defecto
   });
 
   const handlePaginationChange = (newPagination) => {
@@ -23,12 +23,15 @@ const CountriesTanStackTablePaginateServerSideData = () => {
     queryKey: ["countries-list", pagination.pageIndex, pagination.pageSize],
     queryFn: () =>
       fetchCountriesPaginated(pagination.pageIndex + 1, pagination.pageSize),
-    staleTime: 1000 * 60,
+    refetchInterval: 1000 * 60,
     keepPreviousData: true,
   });
 
   // Definimos los datos para la tabla
-  const tableData = countriesQuery.data?.data;
+  const tableData = useMemo(
+    () => countriesQuery.data?.data,
+    [countriesQuery.data]
+  ); // Se recomiendo memoizar
 
   // Define the columns for TanStack table
   const tableColumns = useTanStackColumnDefinitionsCountriesTable();
